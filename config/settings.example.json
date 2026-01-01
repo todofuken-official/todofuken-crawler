@@ -1,0 +1,20 @@
+{
+    "project_dir": "/path/to/todofuken-crawler",
+
+    "database": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "password": "",
+        "database": "todofuken_events"
+    },
+
+    "crawler": {
+        "walkerplus": {
+            "base_url": "https://www.walkerplus.com",
+            "full_scan_pages": 0,
+            "daily_scan_pages": 0
+        }
+    },
+
+    "log_file": "data/logs/crawler.log"
+}
