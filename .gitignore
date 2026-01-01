@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+venv/
+
+# Logs & data
+data/logs/
+data/raw/
+
+# Secrets & configs
+config/*.json
+*.pem
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/result.xlsx

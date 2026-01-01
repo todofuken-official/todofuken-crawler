@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Todofuken Crawler Notifications</title>
+</head>
+<body>
+    <h1>Todofuken Web Push</h1>
+    <button id="btn">알림 허용</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGY3ueFfq0T2ZTCWZxfDPS3pjr3UfsYDA",
+            authDomain: "todofuken-crawler.firebaseapp.com",
+            projectId: "todofuken-crawler",
+            storageBucket: "todofuken-crawler.firebasestorage.app",
+            messagingSenderId: "380143421074",
+            appId: "1:380143421074:web:87ff4d47ba26a0339c084b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        navigator.serviceWorker.register("/firebase-messaging-sw.js", { type: "module" })
+            .then(reg => {
+                console.log("Service Worker registered:", reg);
+            })
+            .catch(err => console.error("SW registration failed:", err));
+
+        document.getElementById("btn").addEventListener("click", async () => {
+            console.log("Requesting notification permission...");
+
+            const permission = await Notification.requestPermission();
+            if (permission !== "granted") {
+                console.log("Notification permission denied.");
+                return;
+            }
+            console.log("Notification permission granted.");
+
+            const vapidKey = "BKbATiDMAUnpLSHO7A4dXgzQbWltbaOqEfEmyL9SqChTpYYJ9__XPAVnoS1veCkm35XBpA4g4ZRB-1CukGkle-s";
+
+            try {
+                const token = await getToken(messaging, {
+                    vapidKey,
+                    serviceWorkerRegistration: await navigator.serviceWorker.ready
+                });
+
+                console.log("FCM Token:", token);
+
+                await fetch("http://127.0.0.1:8000/save_token", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ token })
+                });
+
+            } catch (err) {
+                console.error("Error getting token:", err);
+            }
+        });
+
+        onMessage(messaging, (payload) => {
+            console.log("Message received:", payload);
+        });
+
+    </script>
+</body>
+</html>
