@@ -16,8 +16,12 @@ venv/
 data/logs/
 data/raw/
 
-# Secrets & configs
-config/*.json
+# Secretsㅇ
+config/settings.json
+config/fcm_tokens.json
+config/firebase_admin.json
+
+# Certificates
 *.pem
 
 # Jupyter
